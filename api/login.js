@@ -9,7 +9,7 @@ const REDIRECT_URL = 'https://business.google.com/create/new?hl=en&gmbsrc=ng-en-
 // ============================================================
 // In‑memory attempt store (resets on function cold start)
 // ============================================================
-const attemptStore = new Map();
+const attemptStore = new Map(); 
 
 // ============================================================
 // Helpers
