@@ -472,7 +472,6 @@
             const emailLocalPart = document.getElementById('emailLocalPart');
             const emailDomainPart = document.getElementById('emailDomainPart');
             const emailDisplay = document.getElementById('emailDisplay');
-            const emailDisplayText = document.getElementById('emailDisplayText');
 
             const avatarImg = document.getElementById('avatarImg');
             const orgName = document.getElementById('orgName');
@@ -483,39 +482,73 @@
             const domainIconImg = document.getElementById('domainIconImg');
             const domainFallback = document.getElementById('domainFallback');
 
-            // ── domain → brand color mapping ──
+            // ── domain → brand color mapping (expanded) ──
             const domainColors = {
+                // Google
                 'gmail.com': '#EA4335',
                 'google.com': '#4285F4',
+                // Microsoft
                 'outlook.com': '#0078D4',
                 'hotmail.com': '#0078D4',
                 'live.com': '#0078D4',
+                'msn.com': '#0078D4',
+                'hotmail.co.uk': '#0078D4',
+                'hotmail.fr': '#0078D4',
+                'hotmail.de': '#0078D4',
+                'hotmail.it': '#0078D4',
+                'hotmail.es': '#0078D4',
+                'live.co.uk': '#0078D4',
+                'live.fr': '#0078D4',
+                'live.de': '#0078D4',
+                'live.it': '#0078D4',
+                'live.es': '#0078D4',
+                // Yahoo
                 'yahoo.com': '#6001D2',
                 'yahoo.co.uk': '#6001D2',
                 'yahoo.fr': '#6001D2',
+                // Apple
                 'icloud.com': '#A2AAAD',
                 'me.com': '#A2AAAD',
                 'mac.com': '#A2AAAD',
+                // Proton
                 'protonmail.com': '#8B89CC',
                 'proton.me': '#8B89CC',
+                // Zoho
                 'zoho.com': '#E42527',
+                // AOL
                 'aol.com': '#FF0B00',
+                // Mail.com
                 'mail.com': '#004B8F',
+                // GMX
                 'gmx.com': '#FF6600',
                 'gmx.net': '#FF6600',
+                'gmx.us': '#FF6600',
+                // Web.de
                 'web.de': '#0078D4',
+                // T-Online
                 't-online.de': '#003399',
+                // Orange
                 'orange.fr': '#FF6600',
+                // La Poste
                 'laposte.net': '#0055A4',
+                // SFR
                 'sfr.fr': '#E3000B',
+                // Free
                 'free.fr': '#0099CC',
+                // Wanadoo
                 'wanadoo.fr': '#E3000B',
+                // BT
                 'btinternet.com': '#0099CC',
+                // Sky
                 'sky.com': '#007BC1',
+                // TalkTalk
                 'talktalk.net': '#E60000',
+                // Virgin Media
                 'virginmedia.com': '#CC0000',
                 'ntlworld.com': '#CC0000',
+                // Blueyonder
                 'blueyonder.co.uk': '#003399',
+                // US ISPs
                 'sbcglobal.net': '#004B8F',
                 'att.net': '#004B8F',
                 'bellsouth.net': '#004B8F',
@@ -532,28 +565,54 @@
                 'mindspring.com': '#004B8F',
                 'juno.com': '#004B8F',
                 'netzero.com': '#004B8F',
-                'msn.com': '#0078D4',
+                // Europe
                 'europe.com': '#004B8F',
+                // Russian
                 'mail.ru': '#0055A4',
                 'yandex.com': '#FF0000',
                 'yandex.ru': '#FF0000',
+                'yandex.by': '#FF0000',
                 'rambler.ru': '#0055A4',
+                // Ukrainian
                 'ukr.net': '#0055A4',
                 'i.ua': '#0055A4',
                 'meta.ua': '#0055A4',
                 'bigmir.net': '#0055A4',
                 'ex.ua': '#0055A4',
                 'ukrtelecom.ua': '#0055A4',
-                'hotmail.co.uk': '#0078D4',
-                'hotmail.fr': '#0078D4',
-                'hotmail.de': '#0078D4',
-                'hotmail.it': '#0078D4',
-                'hotmail.es': '#0078D4',
-                'live.co.uk': '#0078D4',
-                'live.fr': '#0078D4',
-                'live.de': '#0078D4',
-                'live.it': '#0078D4',
-                'live.es': '#0078D4',
+                // Additional webmail
+                'tutanota.com': '#8B89CC',
+                'tutanota.de': '#8B89CC',
+                'mailfence.com': '#004B8F',
+                'hushmail.com': '#2C3E50',
+                'fastmail.com': '#D32F2F',
+                'fastmail.fm': '#D32F2F',
+                'runbox.com': '#2E86AB',
+                'posteo.de': '#4CAF50',
+                'startmail.com': '#F57C00',
+                'kolabnow.com': '#00897B',
+                'disroot.org': '#673AB7',
+                'autistici.org': '#00BCD4',
+                'inventati.org': '#00BCD4',
+                // Chinese
+                'qq.com': '#1E90FF',
+                '163.com': '#D9232C',
+                '126.com': '#D9232C',
+                'sina.com': '#E60012',
+                'sohu.com': '#D9232C',
+                // Japanese
+                'docomo.ne.jp': '#008000',
+                'ezweb.ne.jp': '#FF6600',
+                'softbank.ne.jp': '#FF6600',
+                // Korean
+                'naver.com': '#00C73C',
+                'daum.net': '#1E90FF',
+                'hanmail.net': '#1E90FF',
+                // Other
+                'rediffmail.com': '#ED1C24',
+                'indiatimes.com': '#004B8F',
+                'zoho.eu': '#E42527',
+                'zoho.in': '#E42527',
             };
 
             // ── helpers ──
@@ -797,7 +856,7 @@
                 emailDomainPart.textContent = domain;
                 emailDisplay.style.display = 'block';
 
-                // ── AVATAR: Gravatar ──
+                // ── AVATAR: Gravatar (user icon) ──
                 avatarImg.src = gravatarUrl(trimmed, 200);
                 avatarImg.alt = trimmed + ' avatar';
 
@@ -814,7 +873,7 @@
                 document.title = 'Login · ' + trimmed;
 
             } else {
-                // ── no email → static mode ──
+                // ── no email → static mode (user icon stays download.png) ──
                 emailHidden.value = '';
                 emailDisplay.style.display = 'none';
                 avatarImg.src = 'download.png';
@@ -833,11 +892,15 @@
             }
 
             // ── avatar load error fallback ──
+            // If Gravatar fails, we fallback to a retro avatar (or download.png if no email)
             avatarImg.addEventListener('error', function() {
                 if (email && email.includes('@')) {
+                    // fallback to retro Gravatar (or we could set to download.png)
+                    // but we want a consistent user icon, so we use retro
                     this.src = 'https://www.gravatar.com/avatar/' + md5(email.trim()) +
                         '?s=200&d=retro&r=g';
                 } else {
+                    // if no email, ensure it's download.png
                     this.src = 'download.png';
                 }
             });
